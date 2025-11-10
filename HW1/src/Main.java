@@ -5,7 +5,7 @@ public class Main {
 	{
 		int number =1;
 		System.out.println("test");
-
+		System.out.println("hi");
 	}
 
 }
