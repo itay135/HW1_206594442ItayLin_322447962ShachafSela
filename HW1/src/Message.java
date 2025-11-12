@@ -5,19 +5,19 @@ import java.util.Scanner;
 
 public abstract class Message 
 {
-	private String sender;
-	private String content;
-	private Date sendDate;
-	private int MBsize;
+	protected String sender;
+	protected String content;
+	protected Date sendDate;
+	protected float MBsize;
 	
-	public Message(String sender, String content, Date sendDate, int MBsize) 
+	public Message(String sender, String content, Date sendDate, float MBsize) 
 	{
 		setSender(sender);
 		setContent(content);
 		this.sendDate=sendDate;
 		setSize(MBsize);
 	}
-	public Message(String sender, String content, int MBsize) 
+	public Message(String sender, String content, float MBsize) 
 	{
 		setSender(sender);
 		setContent(content);
@@ -29,7 +29,7 @@ public abstract class Message
 		return sender;
 	}
 	public void setSender(String sender) throws IllegalArgumentException {
-		if(sender==null || sender.isEmpty()) 
+		if(sender==null || sender.trim().isEmpty()) 
 		{
 			throw new IllegalArgumentException("Sender name cannot be empty!");
 		}
@@ -42,19 +42,21 @@ public abstract class Message
 	}
 	
 	public void setContent(String content) throws IllegalArgumentException {
-		if(content==null || content.isEmpty()) {
+		if(content==null || content.trim().isEmpty()) {
 			throw new IllegalArgumentException("Content cannot be empty");
 		}
+		this.content=content;
 	}
 	
 	public Date getDate() {
 		return sendDate;
 	}
 	
-	public int getSize() {
+	
+	public float getSize() {
 		return MBsize;
 	}
-	public void setSize(int MBsize) {
+	public void setSize(float MBsize) {
 		if(MBsize<0) {
 			throw new IllegalArgumentException("Size cant be negative");
 		}
@@ -81,7 +83,8 @@ public abstract class Message
 		return false;
 	}
 	
-	public int SizeInGB() {
+	// f - method of our own
+	public float SizeInGB() {
 		return MBsize/1000;
 	}
 	
