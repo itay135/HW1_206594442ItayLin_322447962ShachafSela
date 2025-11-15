@@ -14,7 +14,7 @@ public class BoardMessage extends Message
 	private PriorityType priority;
 	
 	// se'if b 
-	public BoardMessage(String sender, String content, Date sendDate, int MBsize, PriorityType priority) 
+	public BoardMessage(String sender, String content, Date sendDate, int MBsize, PriorityType priority) throws IllegalArgumentException
 	{
 		super(sender, content, sendDate, MBsize);
 		this.priority=priority;
@@ -31,7 +31,7 @@ public class BoardMessage extends Message
 	//a
 	public PriorityType getPriority() 
 	{
-		return priority;
+		return this.priority;
 	}
 	
 	public void setPriority(PriorityType priority) 

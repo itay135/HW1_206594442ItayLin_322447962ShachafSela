@@ -6,7 +6,7 @@ public class File
 	private String fileName;
 	private String fileType;
 	
-	public File(String fileName, String fileType) 
+	public File(String fileName, String fileType) throws IllegalArgumentException
 	{
 		setName(fileName);
 		setType(fileType);
@@ -33,7 +33,7 @@ public class File
 	{
 		return fileType;
 	}
-	public void setType(String fileType) 
+	public void setType(String fileType) throws IllegalArgumentException
 	{
 		if(fileType==null || fileType.isEmpty()) 
 		{

@@ -10,14 +10,14 @@ public abstract class Message
 	protected Date sendDate;
 	protected float MBsize;
 	
-	public Message(String sender, String content, Date sendDate, float MBsize) 
+	public Message(String sender, String content, Date sendDate, float MBsize) throws IllegalArgumentException
 	{
 		setSender(sender);
 		setContent(content);
 		this.sendDate=sendDate;
 		setSize(MBsize);
 	}
-	public Message(String sender, String content, float MBsize) 
+	public Message(String sender, String content, float MBsize) throws IllegalArgumentException
 	{
 		setSender(sender);
 		setContent(content);
@@ -26,7 +26,7 @@ public abstract class Message
 	}
 	
 	public String getSender() {
-		return sender;
+		return this.sender;
 	}
 	public void setSender(String sender) throws IllegalArgumentException {
 		if(sender==null || sender.trim().isEmpty()) 
@@ -66,8 +66,8 @@ public abstract class Message
 	@Override
 	public String toString() 
 	{
-		return "Message sender: " + sender + " Content: " + content 
-				+ " Send Date: "+ sendDate + "Message size in MB: "+MBsize+"MB";
+		return "Message sender: " + sender + ", Content: " + content 
+				+ ", Send Date: "+ sendDate + ", Message size in MB: "+MBsize+"MB";
 	}
 	
 	public boolean find(ArrayList<String> words) 
