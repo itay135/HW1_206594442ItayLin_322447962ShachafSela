@@ -1,10 +1,15 @@
 import java.awt.Menu;
 import java.io.*;
-import java.sql.Date;
+import java.lang.invoke.StringConcatFactory;
+import java.security.KeyStore.Entry;
 import java.util.ArrayList;
 import java.util.Scanner;
-
+import java.text.SimpleDateFormat;
+import java.text.ParseException;
+import java.util.Date;
+import java.util.InputMismatchException;
 import javax.sound.midi.VoiceStatus;
+
 public class Main 
 {
 
@@ -48,6 +53,7 @@ public class Main
 			}
 			
 		}
+		scanner.close();
 		
 	}
 	public static class Menu
@@ -60,61 +66,160 @@ public class Main
 			System.out.println("3.Display all messages");
 			System.out.println("4.Display message count containing words");
 		}
-		public static int messageType(Scanner scanner) throws IllegalArgumentException
+		//making sure user's answer is valid.
+		public static int readIntInRange(Scanner scanner, String prompt, int min, int max)
 		{
-			
-			System.out.println("Please choose message type:");
-			System.out.println("1.Email");
-			System.out.println("2.Board message");
-			System.out.println("3.SMS");
-			int choice = scanner.nextInt();
-			return choice;
-			
-		}
-		
-		public static void addMessage(Scanner scanner) throws IllegalArgumentException
-		{
-			System.out.println("Please enter sender's name: ");
-			String sender = scanner.nextLine(); 
-			System.out.println("Please enter message's content: ");
-			String content = scanner.nextLine();
-			// we need to convert to Date format and ask user if he wants to add a date
-			//System.out.println("Please enter date in format dd/mm/yyyy: ");
-			//Date sendDate = (Date)scanner.nextLine(); 
-			//we need to make sure that the input is a float
-			System.out.println("Please enter messege's size in MB: ");
-			float MBsize = scanner.nextFloat();
-			scanner.nextLine();
-			int choice =Menu.messageType(scanner);	
-			switch (choice) {
-			case 1: //email
+			int choice;
+			while (true)
 			{
-				
 				try 
 				{
-					System.out.println("Please enter the subject: ");
-					String subject = scanner.nextLine();
-					
-					
+					System.out.println(prompt);
+					choice =scanner.nextInt();
+					scanner.nextLine(); 
+					if (choice >= min && choice <=max)
+					{
+						break;//valid input
+					}
+					else
+					{
+						System.out.println("Invalid input.");
+					}
 				}
-				catch (Exception e) {
-					
+				catch (InputMismatchException e)
+				{
+					System.out.println(e.getMessage());
+					scanner.nextLine();	
 				}
 			}
-			case 2://BoardMessage
+			return choice;
+		}
+		
+		public static int messageType(Scanner scanner) throws IllegalArgumentException
+		{
+			String prompt = "Please choose a message type:\n" 
+					+ "1.email\n" + "2.Board message\n" + "3.SMS\n";
+			return readIntInRange(scanner, prompt, 1, 3);
+		}
+		//
+		public static Date addDate(Scanner scanner)
+		{
+			while (true)
+			{
+				System.out.println("Do you want to add a date? (y\n)");
+				String choice = scanner.nextLine().trim().toLowerCase();
+				if (choice.equals("y"))
+				{
+					while(true)
+					{
+						try
+						{
+							System.out.println("Please enter a date in dd/mm/yyyy:");
+							String input = scanner.nextLine();
+							SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
+							Date date = formatter.parse(input);
+							return date;
+						}
+						catch (ParseException e)
+						{
+							System.out.println(e.getMessage());
+						}
+					}
+				}
+				else if (choice.equals("n"))
+				{
+					return null;
+				}
+				else 
+				{
+					System.out.println("Invalid answer. Please try again");
+				}
+			}
+		}
+		//making sure we wont get empty strings
+		public static String readNonEmptyString(Scanner scanner, String prompt)
+		{
+			String input;
+			while (true)
+			{
+				System.out.println(prompt);
+				input = scanner.nextLine();
+				if(input==null || input.trim().isEmpty())
+				{
+					System.out.println("Input cannot be empty. Please try again."); 
+				}
+				else 
+				{
+					break;
+				}
+			}
+			return input;
+		}
+		//making sure size is in a correct format
+		public static float readPositiveFloat(Scanner scanner , String prompt)
+		{
+			float value;
+			while (true)
+			{
+				try
+				{
+					System.out.println(prompt);
+					value = scanner.nextFloat();
+					scanner.nextLine();
+					if (value<0)
+					{
+						System.out.println("value must be positive. Please try again.");
+					}
+					else
+					{
+						break;
+					}
+				}
+				catch (InputMismatchException e)
+				{
+					System.out.println(e.getMessage());
+					scanner.nextLine();
+				}
+				
+			}
+			return value;
+		}
+		//creates a Message.
+		public static Message createMessage(Scanner scanner) throws IllegalArgumentException
+		{
+			String sender = readNonEmptyString(scanner, "Please enter sender's name");
+			String content = readNonEmptyString(scanner, "Please entrer message's content");
+			Date date = addDate(scanner);
+			float MBSize = readPositiveFloat(scanner, "Please enter message's size in MB");
+			int choice = messageType(scanner);
+			switch (choice)
+			{
+			case 1: //Email
+			{
+				String subject = readNonEmptyString(scanner, "Please enter email's subject");
+				if(date == null)
+				{
+					return new EmailMessage(subject, sender, content, MBSize);
+				}
+				else 
+				{
+					return new EmailMessage(subject, sender, content, date, MBSize);
+				}
+			}
+			case 2://Board Message
 			{
 				
 			}
-			case 3://SMSMessage
+			case 3:// SMS
 			{
 				
 			}
 			default:
 				throw new IllegalArgumentException("Unexpected value: " + choice);
 			}
-			
 		}
-		
+		// func for adding files to an email
+		// func for adding a Message to  the arraylist.
 	}
 
 }
