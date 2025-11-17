@@ -50,9 +50,10 @@ public class EmailMessage extends Message implements IDigital
 	}
 	public void removeAttachment(File file) throws AttachmentException
 	{
-		if (!files.contains(file))
+		boolean remove = files.removeIf(f -> f.equals(file));//checks every file and removes it only if its the same
+		if(!remove)
 		{
-			throw new AttachmentException("Attachment not found");
+			throw new AttachmentException("File doesn't exist");
 		}
 	}
 	

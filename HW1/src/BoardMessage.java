@@ -14,14 +14,14 @@ public class BoardMessage extends Message
 	private PriorityType priority;
 	
 	// se'if b 
-	public BoardMessage(String sender, String content, Date sendDate, int MBsize, PriorityType priority) throws IllegalArgumentException
+	public BoardMessage(String sender, String content, Date sendDate, float MBsize, PriorityType priority) throws IllegalArgumentException
 	{
 		super(sender, content, sendDate, MBsize);
 		this.priority=priority;
 	}
 	
 	//c
-	public BoardMessage(String sender, String content, int MBsize) 
+	public BoardMessage(String sender, String content, float MBsize) 
 	{
 		super(sender,content,MBsize);
 		this.priority = PriorityType.REGULAR;

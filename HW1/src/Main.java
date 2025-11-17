@@ -1,14 +1,13 @@
 import java.awt.Menu;
 import java.io.*;
-import java.lang.invoke.StringConcatFactory;
-import java.security.KeyStore.Entry;
+import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.Scanner;
 import java.text.SimpleDateFormat;
 import java.text.ParseException;
 import java.util.Date;
 import java.util.InputMismatchException;
-import javax.sound.midi.VoiceStatus;
+
 
 public class Main 
 {
@@ -197,29 +196,94 @@ public class Main
 			case 1: //Email
 			{
 				String subject = readNonEmptyString(scanner, "Please enter email's subject");
+				EmailMessage newEmail;
 				if(date == null)
 				{
-					return new EmailMessage(subject, sender, content, MBSize);
+					newEmail = new EmailMessage(subject, sender, content, MBSize);
 				}
 				else 
 				{
-					return new EmailMessage(subject, sender, content, date, MBSize);
+					newEmail = new EmailMessage(subject, sender, content, date, MBSize);				}
+				
+				while(true)
+				{
+					File file = createFile(scanner);
+					if (file != null)
+					{
+						newEmail.addAttachment(file);
+						System.out.println("Attachment added successfully");
+					}
+					else
+					{
+						break;
+					}
 				}
+				return newEmail;
+				
 			}
 			case 2://Board Message
 			{
+				if(date ==null)
+				{
+					System.out.println("No date provided. Priority will be set to regular");
+					return new BoardMessage(sender, content, MBSize);
+				}
+				else 
+				{
+					PriorityType priorit = readPriorityType(scanner);
+					return new BoardMessage(sender, content, date, MBSize, priorit);
+				}
 				
 			}
 			case 3:// SMS
 			{
-				
+				while (true)
+				{
+					try
+					{
+						System.out.println("Please enter sender's age");
+						int age = scanner.nextInt();
+						break;
+					}
+					catch (IllegalArgumentException e)
+					{
+						System.out.println(e.getMessage());
+						scanner.nextInt();
+					}
+				}
+				return new SMSMessage(age, sender, content, MBSize);
 			}
 			default:
 				throw new IllegalArgumentException("Unexpected value: " + choice);
 			}
 		}
-		// func for adding files to an email
+		public static File createFile(Scanner scanner)
+		{		
+			String prompt = "Add an attachment? Please choose an option:/n" + "1.Yes/n" + "2.No";
+			if(readIntInRange(scanner, prompt, 1, 2)==1)
+			{
+				String fileName = readNonEmptyString(scanner, "Please enter attachments name");
+				String fileType = readNonEmptyString(scanner, "Please enter attachment's type");
+				File file = new File(fileName, fileType); 
+				return file;
+			}
+			else return null;
+			
+		}
 		// func for adding a Message to  the arraylist.
+		public static PriorityType readPriorityType(Scanner scanner)
+		{
+			String prompt = "Please choose priority:\n" + "1.REGULAR\n" + "2.URGENT";
+			int choice = readIntInRange(scanner, prompt, 1, 2);
+			if (choice==2)
+			{
+				return PriorityType.URGENT;
+			}
+			else
+			{
+				return PriorityType.REGULAR;
+			}
+		}
 	}
 
 }
