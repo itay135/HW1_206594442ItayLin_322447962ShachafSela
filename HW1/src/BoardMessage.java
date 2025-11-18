@@ -5,7 +5,8 @@ import java.util.Scanner;
 
 enum PriorityType{
 	REGULAR,
-	URGENT
+	URGENT,
+	AD
 }
 
 public class BoardMessage extends Message
