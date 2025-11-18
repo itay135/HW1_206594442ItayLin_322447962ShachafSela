@@ -45,9 +45,9 @@ public class Main
 		{
 			String prompt =  "Please choose an option:\n" + "1.New message\n" + "2.Delete message\n"
 		+ "3.Display all messages\n" + "4.Display message count containing words\n"
-					+"5.Print Digital messages\n"+ "6.Show largest message";
+					+"5.Print Digital messages\n"+ "6.Show largest message\n"+"7.LogOut" ;
 		
-			choice = Menu.readIntInRange(scanner, prompt, 1, 6);
+			choice = Menu.readIntInRange(scanner, prompt, 1, 7);
 		switch (choice) 
 		{
 			case 1: 
@@ -83,7 +83,7 @@ public class Main
 			case 3:
 			{
 				for(int i=0;i<messages.size();i++) {
-					System.out.println("Message number "+(i+1)+ messages.get(i).toString());
+					System.out.println("Message number "+(i+1)+" "+ messages.get(i).toString());
 				}
 				break;
 			}
@@ -121,6 +121,12 @@ public class Main
 					}
 				}
 				System.out.println("The largest message weights "+max+" MB and is"+largest.generatePreview());
+				break;
+			}
+			case 7:
+			{
+				System.out.println("Bye!");
+				exit=true;
 				break;
 			}
 			

@@ -9,7 +9,7 @@ public class SMSMessage extends Message implements IDigital
 	{
 		if (age < 8)
 		{
-			throw new IllegalAgeException("Sender's age must be at least 8 years");
+			throw new IllegalAgeException(" Sender's age must be at least 8 years");
 		}
 		this.age = age;
 	}

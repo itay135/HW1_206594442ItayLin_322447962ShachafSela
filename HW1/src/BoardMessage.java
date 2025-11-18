@@ -41,7 +41,7 @@ public class BoardMessage extends Message
 	
 	//d
 	public String toString() {
-		return super.toString() + "Board Message Priority: "+priority;
+		return super.toString() + " Board Message Priority: "+priority;
 	}
 	
 	//e - Method of our own

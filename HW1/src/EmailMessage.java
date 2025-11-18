@@ -34,7 +34,7 @@ public class EmailMessage extends Message implements IDigital
 	@Override 
 	public String toString()
 	{
-		return super.toString() + "email subject: " + subject;
+		return super.toString() + " email subject: " + subject;
 	}
 	public String printCommunicationMetod()
 	{
