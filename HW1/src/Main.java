@@ -31,21 +31,32 @@ public class Main
 		int choice = 0;
 		while (!exit)
 		{
-			Menu.showMenu();
-			choice = scanner.nextInt();
+			String prompt =  "Please choose an option:\n" + "1.New message\n" + "2.Delete message\n"
+		+ "3.Display all messages\n" + "4.Display message count containing words\n";
+		
+			choice = Menu.readIntInRange(scanner, prompt, 1, 4);
 			switch (choice) 
 			{
 			case 1: 
 			{
 				try 
 				{
-					
+					Message newMessage = Menu.createMessage(scanner);
+					messages.add(newMessage);
+					break;
 				} 
-				catch (Exception e) 
+				catch (IllegalArgumentException e) 
 				{
-					// TODO: handle exception
+					System.out.println(e.getMessage());
 				}
-				break;
+				catch (InputMismatchException e)
+				{
+					System.out.println(e.getMessage());
+				}
+				catch (IllegalAgeException e)
+				{
+					System.out.println(e.getMessage());
+				}
 			}
 			default:
 				throw new IllegalArgumentException("Unexpected value: " + choice);
@@ -184,7 +195,7 @@ public class Main
 			return value;
 		}
 		//creates a Message.
-		public static Message createMessage(Scanner scanner) throws IllegalArgumentException
+		public static Message createMessage(Scanner scanner) throws IllegalArgumentException , IllegalAgeException
 		{
 			String sender = readNonEmptyString(scanner, "Please enter sender's name");
 			String content = readNonEmptyString(scanner, "Please entrer message's content");
@@ -219,7 +230,6 @@ public class Main
 					}
 				}
 				return newEmail;
-				
 			}
 			case 2://Board Message
 			{
@@ -233,30 +243,38 @@ public class Main
 					PriorityType priorit = readPriorityType(scanner);
 					return new BoardMessage(sender, content, date, MBSize, priorit);
 				}
-				
 			}
 			case 3:// SMS
 			{
+				int age=0;
 				while (true)
 				{
 					try
 					{
 						System.out.println("Please enter sender's age");
-						int age = scanner.nextInt();
+						age = scanner.nextInt();
+						if(age<=0)
+						{
+							throw new IllegalArgumentException();
+						}
 						break;
 					}
 					catch (IllegalArgumentException e)
 					{
 						System.out.println(e.getMessage());
-						scanner.nextInt();
+						scanner.nextLine();
+					}
+					catch (InputMismatchException e)
+					{
+						System.out.println(e.getMessage());
+						scanner.nextLine();
 					}
 				}
-				return new SMSMessage(age, sender, content, MBSize);
+				return new SMSMessage(age , sender, content, MBSize);
 			}
-			default:
-				throw new IllegalArgumentException("Unexpected value: " + choice);
-			}
+			default: throw new IllegalArgumentException();
 		}
+	}
 		public static File createFile(Scanner scanner)
 		{		
 			String prompt = "Add an attachment? Please choose an option:/n" + "1.Yes/n" + "2.No";
