@@ -13,7 +13,7 @@ public class BoardMessage extends Message
 	
 	private PriorityType priority;
 	
-	// se'if b 
+	// b 
 	public BoardMessage(String sender, String content, Date sendDate, float MBsize, PriorityType priority) throws IllegalArgumentException
 	{
 		super(sender, content, sendDate, MBsize);
